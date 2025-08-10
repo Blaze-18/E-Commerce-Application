@@ -59,8 +59,8 @@ public class ProductService {
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(category);
     }
-    public List<Product> getProductsByRatingAndName(double rating, String name) {
-        return productRepository.findByRatingAndNameIgnoreCaseOrderByRatingAsc(rating, name);
+    public List<Product> getProductsByRatingAndCategory(double rating, String name) {
+        return productRepository.findByRatingAndCategoryContainsIgnoreCaseOrderByRatingAsc(rating, name);
     }
 
     public List<Product> getProductsByStockQuantityGreaterThanEqual(int stockQuantity) {
