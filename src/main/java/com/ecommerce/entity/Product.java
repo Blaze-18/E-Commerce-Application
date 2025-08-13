@@ -1,10 +1,8 @@
 package com.ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -20,21 +18,32 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Product name cannot be blank")
+    @Size(max = 100, message = "Product name must be less than 100 characters")
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Size(max = 500, message = "Description must be less than 500 characters")
     @Column(length = 500)
     private String description;
 
+    @NotNull
+    @Positive(message = "Price must be a positive value greater than zero")
     @Column(nullable = false)
     private Double price;
 
+    @NotNull(message = "Stock quantity cannot be null")
+    @Size(min = 0, message = "Stock quantity must be a non-negative integer")
     @Column(nullable = false)
     private int stockQuantity;
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Category cannot be blank")
+    @Size(max = 50, message = "Category must be less than 100 characters")
+    @Column(nullable = false, length = 50)
     private String category;
 
+    @DecimalMin(value = "0.0", message = "Rating cannot be less than 0")
+    @DecimalMax(value = "5.0", message = "Rating cannot be more than 5")
     @Column()
     private double rating;
 
