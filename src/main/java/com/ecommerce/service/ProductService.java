@@ -1,6 +1,8 @@
 package com.ecommerce.service;
 
+import com.ecommerce.entity.Category;
 import com.ecommerce.entity.Product;
+import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +12,21 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
     // Add methods to interact with the productRepository as needed for business logic
 
     public void addProduct(Product product) {
+        if(product.getCategory().getId()==null){
+            throw new IllegalArgumentException("Category ID must not be null");
+        }
+        Category category = categoryRepository.findById(product.getCategory().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found with ID: " + product.getCategory().getId()));
+        product.setCategory(category);
         productRepository.save(product);
     }
     public void deleteProductById(Long id){
@@ -56,12 +66,12 @@ public class ProductService {
     public List<Product> getProductsByPriceBetween(double low, double high) {
         return productRepository.findByPriceBetween(low, high);
     }
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategory(category);
-    }
-    public List<Product> getProductsByRatingAndCategory(double rating, String name) {
-        return productRepository.findByRatingAndCategoryContainsIgnoreCaseOrderByRatingAsc(rating, name);
-    }
+//    public List<Product> getProductsByCategory(String category) {
+//        return productRepository.findByCategory(category);
+//    }
+//    public List<Product> getProductsByRatingAndCategory(double rating, String name) {
+//        return productRepository.findByRatingAndCategoryContainsIgnoreCaseOrderByRatingAsc(rating, name);
+//    }
 
     public List<Product> getProductsByStockQuantityGreaterThanEqual(int stockQuantity) {
         return productRepository.findByStockQuantityGreaterThanEqual(stockQuantity);

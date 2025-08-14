@@ -1,5 +1,8 @@
 package com.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -33,14 +36,17 @@ public class Product {
     private Double price;
 
     @NotNull(message = "Stock quantity cannot be null")
-    @Size(min = 0, message = "Stock quantity must be a non-negative integer")
+    @Min(value = 0, message = "Stock quantity must be a non-negative integer")
     @Column(nullable = false)
-    private int stockQuantity;
+    private Long stockQuantity;
 
-    @NotBlank(message = "Category cannot be blank")
-    @Size(max = 50, message = "Category must be less than 100 characters")
-    @Column(nullable = false, length = 50)
-    private String category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @NotNull(message = "Category cannot be null")
+    @JsonIdentityInfo(generator =  ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    private Category category;
 
     @DecimalMin(value = "0.0", message = "Rating cannot be less than 0")
     @DecimalMax(value = "5.0", message = "Rating cannot be more than 5")

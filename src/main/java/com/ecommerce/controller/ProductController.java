@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.entity.Product;
+import com.ecommerce.service.CategoryService;
 import com.ecommerce.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,19 @@ import java.util.List;
 @Validated
 public class ProductController {
     private final ProductService productService;
-
+    private final CategoryService categoryService;
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
     // Add methods to handle HTTP requests and interact with the productService as needed
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public void addProduct(@Valid @RequestBody Product product) {
+
         productService.addProduct(product);
     }
-
     @PutMapping("/update/{id}")
     public void updateProduct(@Valid @RequestBody Product productDetails, @PathVariable Long id) {
         productService.updateProduct(productDetails, id);
@@ -35,7 +37,7 @@ public class ProductController {
     public void deleteProductById(@PathVariable Long id){
         productService.deleteProductById(id);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
@@ -47,11 +49,11 @@ public class ProductController {
     public List<Product> searchByName(@Valid @RequestParam String name){
         return productService.searchByName(name);
     }
-    @GetMapping("/price/ltq")
+    @GetMapping("/price/ltq/{price}")
     public List<Product> getProductsByPriceLessThanEqual(@Valid @RequestParam double price){
         return productService.getProductsByPriceLessThanEqual(price);
     }
-    @GetMapping("/price/gtq")
+    @GetMapping("/price/gtq/{price}")
     public List<Product> getProductsByPriceGreaterThanEqual(@Valid @RequestParam double price) {
         return productService.getProductsByPriceGreaterThanEqual(price);
     }
@@ -59,14 +61,14 @@ public class ProductController {
     public List<Product> getProductsByPriceBetween(@Valid @RequestParam double low,@Valid @RequestParam double high){
         return productService.getProductsByPriceBetween(low, high);
     }
-    @GetMapping("/category")
-    public List<Product> getProductByCategory(@Valid @RequestParam String category){
-        return productService.getProductsByCategory(category);
-    }
-    @GetMapping("/rating")
-    public List<Product>  getProductByRatingAndCategory(@Valid @RequestParam double rating, String category){
-        return productService.getProductsByRatingAndCategory(rating, category);
-    }
+//    @GetMapping("/category")
+//    public List<Product> getProductByCategory(@Valid @RequestParam String category){
+//        return productService.getProductsByCategory(category);
+//    }
+//    @GetMapping("/rating")
+//    public List<Product>  getProductByRatingAndCategory(@Valid @RequestParam double rating, String category){
+//        return productService.getProductsByRatingAndCategory(rating, category);
+//    }
 
     @GetMapping("/stock/gtq")
     public List<Product> getProductsByStockQuantityGreaterThanEqual(@Valid @RequestParam int stockQuantity){
