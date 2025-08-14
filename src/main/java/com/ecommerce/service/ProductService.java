@@ -66,13 +66,9 @@ public class ProductService {
     public List<Product> getProductsByPriceBetween(double low, double high) {
         return productRepository.findByPriceBetween(low, high);
     }
-//    public List<Product> getProductsByCategory(String category) {
-//        return productRepository.findByCategory(category);
-//    }
-//    public List<Product> getProductsByRatingAndCategory(double rating, String name) {
-//        return productRepository.findByRatingAndCategoryContainsIgnoreCaseOrderByRatingAsc(rating, name);
-//    }
-
+    public List<Product> getProductsByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
+    }
     public List<Product> getProductsByStockQuantityGreaterThanEqual(int stockQuantity) {
         return productRepository.findByStockQuantityGreaterThanEqual(stockQuantity);
     }

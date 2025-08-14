@@ -61,14 +61,10 @@ public class ProductController {
     public List<Product> getProductsByPriceBetween(@Valid @RequestParam double low,@Valid @RequestParam double high){
         return productService.getProductsByPriceBetween(low, high);
     }
-//    @GetMapping("/category")
-//    public List<Product> getProductByCategory(@Valid @RequestParam String category){
-//        return productService.getProductsByCategory(category);
-//    }
-//    @GetMapping("/rating")
-//    public List<Product>  getProductByRatingAndCategory(@Valid @RequestParam double rating, String category){
-//        return productService.getProductsByRatingAndCategory(rating, category);
-//    }
+    @GetMapping("/category/{categoryId}")
+    public List<Product> getProductsByCategoryId(@PathVariable Long categoryId) {
+        return productService.getProductsByCategory(categoryId);
+    }
 
     @GetMapping("/stock/gtq")
     public List<Product> getProductsByStockQuantityGreaterThanEqual(@Valid @RequestParam int stockQuantity){

@@ -1,7 +1,9 @@
 package com.ecommerce.service;
 
 import com.ecommerce.entity.Category;
+import com.ecommerce.entity.Product;
 import com.ecommerce.repository.CategoryRepository;
+import com.ecommerce.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-
     public Category createCategory(Category category) {
         if(categoryRepository.existsByName(category.getName())){
             throw new IllegalStateException("Category with name " + category.getName() + " already exists");
@@ -32,7 +33,6 @@ public class CategoryService {
 
         return newCategory;
     }
-
     public void deleteCategory(Long id) {
         if(!categoryRepository.existsById(id)){
             throw new IllegalStateException("Category with id " + id + " does not exist");
